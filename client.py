@@ -8,7 +8,7 @@ import sys
 import verse as v
 
 def cb_ping(host, msg):
-	print "Got", msg, "from", host
+	print "Got '%s'" % msg, "from", host, "( len", len(msg), ")"
 
 if __name__ == "__main__":
 
@@ -18,7 +18,7 @@ if __name__ == "__main__":
 	if len(sys.argv) == 0 or sys.argv[1] == "announce":
 		v.send_ping("localhost:5666", "MS:ANNOUNCE")
 	elif len(sys.argv) >= 1 and sys.argv[1] == "list":
-		v.send_ping("localhost:5666", "MS:LIST")
+		v.send_ping("localhost:5666", "MS:GET IP=\"DE\"")
 
 	while 1:
 		v.callback_update(250000)
