@@ -13,11 +13,10 @@ import verse as v
 VERSION     = "0.4"
 VERSE_PORT  = 4950
 
-LIST_PERIOD = 0.5	# Period between successive list packets to a single client.
-QUEUE_SIZE  = 128	# Number of outstanding DESCRIBE servers we have, at the most.
-MAX_PER_IP  = 32	# Maximum number of servers allowed per IP address.
-QUEUE_TIMEOUT = 5.0	# Max time, in seconds, for a server to spend in queue.
+QUEUE_SIZE  = 512	# Number of outstanding DESCRIBE servers we have, at the most.
+MAX_PER_IP  = 4		# Maximum number of servers allowed per IP address.
 SERVER_TIMEOUT = 137.0	# Max time, in seconds, between ANNOUNCEs, or server is kicked.
+LIST_PERIOD = 0.5	# Period between successive list packets to a single client.
 
 def strip_ip(ip):
 	"""Strips an IP:port address into just the IP, which is returned as a string."""
