@@ -5,7 +5,6 @@
 #
 
 import getopt
-import random
 import sys
 import time
 
