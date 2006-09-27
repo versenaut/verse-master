@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 #
 # A testing client for the Verse master server.
@@ -26,7 +25,7 @@ def address_to_ip(address):
 class Listener:
 	def __init__(self):
 		self.created = time.time()
-		self.set_master("localhost")
+		self.set_master("localhost:4950")
 		self.single = False
 		self.set_duration(10.0)
 		self.set_raw(False)
