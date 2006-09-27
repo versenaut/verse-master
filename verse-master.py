@@ -404,7 +404,7 @@ if __name__ == "__main__":
 		usage()
 		sys.exit(2)
 	talk = True
-	port = 5666
+	port = VERSE_PORT	# By default, run the master server on the standard Verse port. Simplifies for clients.
 	for o, a in opts:
 		if o in ["-h", "--help"]:
 			usage()
