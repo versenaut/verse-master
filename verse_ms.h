@@ -44,7 +44,7 @@ extern void		verse_ms_get_send(const char *address, int fields, const char *tags
 /* Parses a master server response. This will be a string of the form "MS:LIST IP=blah ...",
  * which is split into one chunk per IP, and any additional fields parsed (unquoted etc) too.
  * Returns an array of VMSServer pointers, which is NULL-terminated. Returns NULL if there
- * is was a parse error somewhere in the string.
+ * was a parse error somewhere in the string, no partial success is possible.
 */
 extern VMSServer **	verse_ms_list_parse(const char *list);
 
