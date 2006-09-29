@@ -42,7 +42,7 @@ typedef struct {
 extern void		verse_ms_get_send(const char *address, int fields, const char *tags);
 
 /* Parses a master server response. This will be a string of the form "MS:LIST IP=blah ...",
- * which is split into one chunk per IP, and any additional fields parsed (unquoted etc) too.
+ * which is split into one struct per IP, and any additional fields parsed (unquoted etc).
  * Returns an array of VMSServer pointers, which is NULL-terminated. Returns NULL if there
  * was a parse error somewhere in the string, no partial success is possible.
 */
