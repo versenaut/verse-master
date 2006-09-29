@@ -285,7 +285,6 @@ class Database:
 
 	def announce(self, ip):
 		"""Handle an incoming announce-message from (presumably) a Verse server somewhere."""
-		ip = self._replace_local(ip)
 		# First, check if the server is already registered.
 		if self.servers.has_key(ip):
 			# Yes, so just touch the entry to keep it alive, don't reply.
@@ -401,6 +400,7 @@ class Database:
 			self.talked_last = now
 
 	def _cb_ping(self, address, message):
+		address = self._replace_local(address)
 		if message.startswith("MS:ANNOUNCE"):
 			self.announce(address)
 		elif message.startswith("MS:GET"):
