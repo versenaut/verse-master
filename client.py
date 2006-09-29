@@ -55,7 +55,7 @@ class Listener:
 		v.send_ping(self.master, cmd)
 
 	def _cb_ping(self, host, msg):
-		if host == self.master:
+		if host.startswith(self.master):
 			if not self.raw:
 				entries = msg[7:].lstrip().split("IP=")
 				for e in entries:
