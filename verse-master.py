@@ -5,12 +5,13 @@
 #
 
 import getopt
+import socket
 import sys
 import time
 
 import verse as v
 
-VERSION     = "0.4"
+VERSION     = "0.5"
 VERSE_PORT  = 4950
 
 QUEUE_SIZE  = 512	# Number of outstanding DESCRIBE servers we have, at the most.
@@ -208,6 +209,14 @@ class Database:
 			print "Listening to port %u, ready for use." % port
 		v.set_port(port)
 		v.callback_set(v.SEND_PING,	self._cb_ping)
+		self.gets = 0
+		self.local = None
+
+	def set_local(self, local):
+		"""Sets an IP address to use as replacement for announcements coming in from localhost."""
+		if ":" in local:
+			local = local[:local.index(":")]	# No port number in replacement, please.
+		self.local = socket.gethostbyname(local)	# Resolve if given textually.
 
 	def _parse(self, cmd):
 		"""Parse a received command into a dictionary of keyword=value pairs. Understands the
@@ -257,14 +266,26 @@ class Database:
 					print "Keyword '%s' not followed by equals sign, aborting" % key
 					return None
 			else:
-				print "Expected upper-case key name, aborting"
+				print "Expected upper-case key name, aborting parse of \"%s\"" % cmd
 				return None
 		return kw
 
 	# -----------------------------------------------------------------------------------------------------
 
+	def _replace_local(self, ip):
+		"""Remap requests from 127.0.0.1 to look as they come from the 'local' address, which is settable."""
+		if local != None and ip.startswith("127.0.0.1"):
+			if ":" in ip:
+				ci = ip.index(":")
+				tail = ip[ci:]
+			else:
+				tail = ""
+			return self.local + tail
+		return ip
+
 	def announce(self, ip):
 		"""Handle an incoming announce-message from (presumably) a Verse server somewhere."""
+		ip = self._replace_local(ip)
 		# First, check if the server is already registered.
 		if self.servers.has_key(ip):
 			# Yes, so just touch the entry to keep it alive, don't reply.
@@ -356,12 +377,13 @@ class Database:
 		excl = None
 		if args != None:
 			pa = self._parse(args)
-			if pa.has_key("IP"):
+			if pa != None and pa.has_key("IP"):
 				what["IP"] = [ f for f in pa["IP"].split(",") ]
-			if pa.has_key("TA"):
+			if pa != None and pa.has_key("TA"):
 				incl, excl = self._parse_get_tags(pa["TA"])
 		packets = self._build_list(what, incl, excl)
 		self.listjobs.add(ip, packets)
+		self.gets += 1
 
 	def flush(self):
 		self.listjobs.flush()
@@ -375,7 +397,7 @@ class Database:
 				print "Dropping", e.key + ", expired after %.1f seconds" % (now - e.time)
 				del self.servers[e.key]
 		if self.talk and now - self.talked_last > 10.0:
-			print "There are now %u unique servers registered" % len(self.servers)
+			print "There are now %u unique servers registered. %u GETs serviced" % (len(self.servers), self.gets)
 			self.talked_last = now
 
 	def _cb_ping(self, address, message):
@@ -393,22 +415,26 @@ def usage():
 	print "are running. See <http://verse.blender.org/> for more on Verse."
 	print "Options:"
 	print " -h or --help\t\tThis text."
+	print " -l IP or --local=IP\tSet address to replace 127.0.0.1 with."
 	print " -p PORT or --port=PORT\tSet port number to listen to."
 	print " -q or --quiet\t\tDisable status messages."
 	print " -v or --version\tPrint version number and exit."
 
 if __name__ == "__main__":
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "hp:qv", ["help", "quiet", "port=", "version"])
+		opts, args = getopt.getopt(sys.argv[1:], "hp:qvl:", ["help", "quiet", "port=", "version", "local="])
 	except getopt.GetoptError:
 		usage()
 		sys.exit(2)
 	talk = True
 	port = VERSE_PORT	# By default, run the master server on the standard Verse port. Simplifies for clients.
+	local = "127.0.0.1"	# Incoming requests from localhost are replaced by this.
 	for o, a in opts:
 		if o in ["-h", "--help"]:
 			usage()
 			sys.exit()
+		if o in ["-l", "--local"]:
+			local = a
 		elif o in ["-q", "--quiet"]:
 			talk = False
 		elif o in ["-p", "--port"]:
@@ -421,6 +447,7 @@ if __name__ == "__main__":
 	print "Licensed under the BSD License."
 
 	db = Database(port, talk)
+	db.set_local(local)
 
 	while 1:
 		db.flush()
