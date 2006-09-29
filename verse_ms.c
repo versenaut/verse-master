@@ -1,5 +1,8 @@
 /*
- * A helper library to send and parse master server pings.
+ * A helper library to send and parse master server pings. See the relevant
+ * header for details.
+ * 
+ * This code was written in 2006 by Emil Brink. It is released as public domain.
 */
 
 #include <ctype.h>

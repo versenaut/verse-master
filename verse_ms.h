@@ -21,6 +21,8 @@
  * For a lot more detail about the Verse master server protocol, please see
  * the spec at <http://verse.blender.org/cms/Master_Server__v2.775.0.html>.
  * 
+ * This code was written in 2006 by Emil Brink. It is released as public domain.
+ * 
 */
 
 typedef struct {
