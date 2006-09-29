@@ -18,6 +18,9 @@
  * The application should call free() on the returned vector, whenever it is done with
  * the data (perhaps after copying it into application-defined data structures).
  * 
+ * For a lot more detail about the Verse master server protocol, please see
+ * the spec at <http://verse.blender.org/cms/Master_Server__v2.775.0.html>.
+ * 
 */
 
 typedef struct {
