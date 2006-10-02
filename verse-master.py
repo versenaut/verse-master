@@ -103,8 +103,7 @@ class Queue:
 
 class Database:
 	class Entry:
-		@classmethod
-		def quote(cls, s):
+		def quote(s):
 			"""Quote a string to comply with the Master server protocol's quoting rules."""
 			qs = ""
 			for x in s:
@@ -112,6 +111,7 @@ class Database:
 				elif x == "\\": x = "\\\\"
 				qs += x
 			return qs
+		quote = staticmethod(quote)
 
 		def __init__(self, ip):
 	    		if ":" in ip:
