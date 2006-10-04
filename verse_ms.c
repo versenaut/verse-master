@@ -8,6 +8,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "verse.h"
 #include "verse_ms.h"
@@ -137,7 +138,7 @@ VMSServer ** verse_ms_list_parse(const char *msg)
 	const char	*word[384];	/* Takes quite a lot of stack space. */
 	const char	*ptr;
 	char		*put;
-	size_t		num_word = 0, i, j, k, num_ip = 0, num_field, space = 0;
+	size_t		num_word = 0, i, j, num_ip = 0, num_field, space = 0;
 	VMSServer		**desc, *next;
 	VMSField	*field;
 
