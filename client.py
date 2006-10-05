@@ -9,6 +9,10 @@ import time
 
 import verse as v
 
+quiet = False
+time0 = 0
+time1 = 0
+
 def address_to_ip(address):
 	host = address
 	port = None
@@ -52,10 +56,14 @@ class Listener:
 		cmd = 'MS:GET IP="DE"'
 		if tags != None:
 			cmd += ' TA=%s' % tags
+		if not quiet:
+			print "Sending master server GET to", self.master, "..."
 		v.send_ping(self.master, cmd)
 
 	def _cb_ping(self, host, msg):
+		global time1
 		if host.startswith(self.master):
+			if time1 == 0: time1 = time.time() - time0
 			if not self.raw:
 				entries = msg[7:].lstrip().split("IP=")
 				for e in entries:
@@ -81,15 +89,20 @@ def usage():
 	print " -n\t\t\tShow listed Verse servers by name, through a reverse look-up."
 	print " -raw\t\t\tDisable interpretation of MS:LIST commands; show them as they are."
 	print " -tags=TAGS\t\tSet tag filter to use. Example: -tags=open,sweden,-r6p0."
+	print " -q\t\t\tBe quiet, only print actual list of responses"
 
 
 def main(arg = None):
+	global quiet, time0, time1
+
 	if arg == None: arg = sys.argv
 
 	listen = Listener()
 
 	mode = 'get'
 	tags = None
+
+	listen.set_master("master.uni-verse.org:4950")
 
 	for a in arg[1:]:
 		if a.startswith("-duration="):
@@ -108,13 +121,21 @@ def main(arg = None):
 			listen.set_raw(True)
 		elif a.startswith("-tags="):
 	    		tags = a[6:]
+		elif a == "-q":
+			quiet = True
+		elif a[0] == '-':
+			print "Unknown option", a
 
 	if mode == 'get':
 		listen.send_get(tags)
+		time0 = time.time()
 
 	while 1:
 		v.callback_update(50000)
 		if listen.had_enough(): break
+
+	if not quiet and time1 > 0:
+		print "Got first response after %.2f seconds" % time1
 
 if __name__ == "__main__":
 	main()
