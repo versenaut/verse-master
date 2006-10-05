@@ -25,6 +25,8 @@
  * 
 */
 
+#define	VERSE_MS_VERSION	"1.0"
+
 typedef struct {
 	const char	*name;		/* Field name. Upper-case. */
 	const char	*value;		/* Field value. Fully parsed, might contain spaces. */
