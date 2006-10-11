@@ -1,5 +1,7 @@
 /*
  * A simple example program, showing how to use the verse_ms module.
+ * 
+ * Written October 2006 by Emil Brink. Released to the public domain.
 */
 
 #include <stdio.h>
