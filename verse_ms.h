@@ -27,6 +27,10 @@
 
 #define	VERSE_MS_VERSION	"1.0"
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
 	const char	*name;		/* Field name. Upper-case. */
 	const char	*value;		/* Field value. Fully parsed, might contain spaces. */
@@ -62,3 +66,7 @@ extern int		verse_ms_field_exists(const VMSServer *ms, const char *name);
  * If not, NULL is returned.
 */
 extern const char *	verse_ms_field_value(const VMSServer *ms, const char *name);
+
+#if defined __cplusplus
+}
+#endif
