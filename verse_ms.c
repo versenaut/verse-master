@@ -242,18 +242,18 @@ static const VMSField * field_find(const VMSServer *ms, const char *name)
 	return NULL;
 }
 
-int verse_ms_field_exists(const VMSServer *ms, const char *name)
+int verse_ms_field_exists(const VMSServer *server, const char *name)
 {
-	if(ms == NULL || name == NULL)
+	if(server == NULL || name == NULL)
 		return 0;
-	return field_find(ms, name) != NULL;
+	return field_find(server, name) != NULL;
 }
 
-const char * verse_ms_field_value(const VMSServer *ms, const char *name)
+const char * verse_ms_field_value(const VMSServer *server, const char *name)
 {
 	const VMSField	*f;
 
-	if((f = field_find(ms, name)) != NULL)
+	if((f = field_find(server, name)) != NULL)
 		return f->value;
 	return NULL;
 }

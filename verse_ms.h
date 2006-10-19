@@ -60,12 +60,12 @@ extern VMSServer **	verse_ms_list_parse(const char *list);
 #define	VERSE_MS_FIELD_DESCRIPTION_NAME	"DE"	/* Human-readable server description. */
 
 /* Checks wether the given server has a field with the given name. */
-extern int		verse_ms_field_exists(const VMSServer *ms, const char *name);
+extern int		verse_ms_field_exists(const VMSServer *server, const char *name);
 
 /* Returns the value for the named field in the given server, if present.
  * If not, NULL is returned.
 */
-extern const char *	verse_ms_field_value(const VMSServer *ms, const char *name);
+extern const char *	verse_ms_field_value(const VMSServer *server, const char *name);
 
 #if defined __cplusplus
 }
