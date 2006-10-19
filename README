@@ -1,12 +1,9 @@
-This is a prototype for a Verse master server. The idea is that the master
-server runs somewhere, and maintains a list of "live" Verse servers. This
-list is kept up to date by having the ordinary Verse servers "ping" the
-master server every once in a while. See the -master=IP option in the
-Verse server code.
+This is a reference implementation of a Verse master server.
 
-This is unreleased, a snapshot of something I did just to test the concept
-and get a backend when implementing the initial support for master servers
-in the server itself. Also, that was months ago, and I'm not up to speed
-on the details at the moment, sorry.
+The idea is that the master server runs somewhere, and maintains a list
+of "live" Verse servers. This list is kept up to date by having the
+ordinary Verse servers "ping" the master server every once in a while.
+See the -ms:ip=IP option in the Verse server code.
 
-Written by Emil Brink, PDC KTH, Sweden.
+See the Verse master server spec at 
+<http://verse.blender.org/cms/Master_Server__v2.775.0.html> for more.
