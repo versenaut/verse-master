@@ -57,7 +57,7 @@ class Listener:
 		if tags != None:
 			cmd += ' TA=%s' % tags
 		if not quiet:
-			print "Sending master server GET to", self.master, "..."
+			print "Sending master server GET to", self.master, ": '%s'" % cmd
 		v.send_ping(self.master, cmd)
 
 	def _cb_ping(self, host, msg):
