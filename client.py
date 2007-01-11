@@ -72,7 +72,15 @@ class Listener:
 						ss = e.index(" ")
 						ip = e[:ss]
 						ip.strip('"').strip()
-						print socket.gethostbyaddr(ip)[0],
+						port = ""
+						if ":" in ip:
+							colon = ip.index(":")
+							port = ip[colon + 1:]
+							ip = ip[:colon:]
+						try:	out = socket.gethostbyaddr(ip)[0]
+						except:	out = ip
+						if port != "":	print "%s:%s" % (out, port),
+						else:		print out,
 						e = e[ss + 1:]
 					print e
 			else:
