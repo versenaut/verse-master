@@ -48,19 +48,29 @@ servers = []
 for line in sys.stdin:
 	servers += [line.strip()]
 
-print """<http>
+print """<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
- <title>Verse Master Server Index</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <title>Verse Servers Currently Available</title>
  <style type="text/css">
-  body { background-color: #ddddff; margin-left: 10%; margin-right: 10%; }
+  body { background-color: white; margin-left: 10%; margin-right: 10%; }
   table { border: thin solid #222244; }
   th { background-color: #222244; color: #ddddff; }
   tr.odd { background-color: #aaaacc; }
   tr.even { background-color: #eeeeff; }
+  img { border: none; }
+
+  h1 { margin: 0px; }
+
+  div.main { background-color: #ddddff; padding: 1em; border: thin solid #222244;}
+  div.foot { text-align: right; font-size: 5px; }
  </style>
 </head>
 
 <body>
+<a href="http://verse.blender.org/" border="0"><img src="http://verse.blender.org/cms/fileadmin/verse/gfx/verse_banner.png"/></a>
+<div class="main">
 <h1>Verse Servers Currently Available</h1>
 <p>
 This page lists the public <a href="http://verse.blender.org/">Verse</a> servers that are
@@ -74,15 +84,16 @@ your computer.
 
 print """<table align="center" width="80%" cellpadding="4" cellspacing="0">
 <tr>
+ <th align="center" width="10%">Index</th>
  <th align="left" width="35%">Server Address</th>
  <th align="left">Description</th>
 </tr>
 """
 
-cls = "even"
+i = 0
 for s in servers:
 	tok = tokenize(s)
-	print "<tr class=\"%s\"><td><tt>%s</tt></td>" % (cls, tok[0])
+	print "<tr class=\"%s\"><td align=\"right\">%u</td><td><tt><a href=\"verse://%s\">%s</a></tt></td>" % (["even", "odd"][i & 1], i, tok[0], tok[0])
 	de = ""
 	if len(tok) > 1:
 		for t in tok[1:]:
@@ -91,19 +102,35 @@ for s in servers:
 	print "<td>%s</td>" % de
 	print "</tr>"
 
-	if cls == "even":	cls = "odd"
-	else:			cls = "even"
+	i += 1
+
 print "</table>"
 
-print "<p>The above list was generated at %s, UTC, by quering the Verse master server.</p>" % time.strftime("%Y-%m-%d, %H:%M:%S", time.gmtime())
+extra = ""
+if i == 0:
+	extra = "Perhaps the master server itself is down? Not good ..."
+print "<p><b>%u</b> servers available, total. %s" % (i, extra)
+
+print "<p>The above list was generated at %s (UTC), by quering the Verse master server at <tt>master.uni-verse.org</tt>.</p>" % time.strftime("%Y-%m-%d, %H:%M:%S", time.gmtime())
 
 print """
 <p>
-Because Verse is not a standardized protocol known by web browsers, you cannot click the above
-addresses. Instead, you need to copy the address to the Verse application of your choice. When
-doing so, please don't forget the colon and the subsequent number, if present.
+Verse is not a standardized URI protocol, understood by web browsers. The server column above still contains
+links with a verse: protocol type, since it might be useful to some. If clicking these addresses cannot be
+made to work for you, you need to copy down the address text and manually input it in the Verse applications
+you want to use. If doing so, please make sure you include the full address, especially if it ends in a colon
+and a number (a port number specification).
 </p>
-
+<p>
+Some links that might be of interest:
+</p>
+<ul>
+<li><a href="http://www.uni-verse.org/">www.uni-verse.org</a>, the main site for the Uni-Verse project that currently funds Verse development.
+<li><a href="http://mediawiki.blender.org/index.php/Uni-Verse:Main">Uni-Verse Documentation Wiki</a>, with end-user documentation for many programs released by the Uni-Verse consortium.
+<li><a href="http://verse.blender.org/">verse.blender.org</a>, the main Verse web site. Contains information for developers.
+</ul>
+</div>
+<div class="foot"><a href="http://projects.blender.org/viewcvs/viewcvs.cgi/verse-master/pagebuilder.py?rev=HEAD&cvsroot=verse&content-type=text/vnd.viewcvs-markup">Pagebuilder</a> by Emil Brink</div>
 </body>
 </html>
 """
